@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <timer.h>
+#include <serial.h>
 #include "def.h"
 
 #endif  /* MAIN_H_ */
