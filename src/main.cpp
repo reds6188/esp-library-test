@@ -1,18 +1,23 @@
-#include <Arduino.h>
+#include "main.h"
 
-// put function declarations here:
-int myFunction(int, int);
+Timer TimerBlink1, TimerBlink2;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+	Serial.begin(115200);
+	TimerBlink1.trigger();
+	pinMode(LED_1, OUTPUT);
+	pinMode(LED_2, OUTPUT);
+	pinMode(LED_3, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+	if(TimerBlink1.elapsedX1s()) {
+		TimerBlink1.trigger();
+		digitalWrite(LED_1, !digitalRead(LED_1));
+	}
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+	if(TimerBlink2.elapsedX100ms(2)) {
+		TimerBlink2.trigger();
+		digitalWrite(LED_2, !digitalRead(LED_2));
+	}
 }
