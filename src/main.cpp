@@ -2,6 +2,8 @@
 
 Timer TimerBlink1, TimerBlink2;
 Uart uart_232(UART_232);
+Led Led1(LED_1);
+Led Led2(LED_2);
 
 const char * str = "Hello World!";
 
@@ -29,8 +31,7 @@ void uart_rx_callback (uint8_t *data, int data_size) {
 void setup() {
 	Serial.begin(115200);
 	TimerBlink1.trigger();
-	pinMode(LED_1, OUTPUT);
-	pinMode(LED_2, OUTPUT);
+	Led1.startBlink(100,900);
 	pinMode(LED_3, OUTPUT);
 	pinMode(UART_232_EN, OUTPUT);
 	digitalWrite(UART_232_EN, HIGH);
@@ -39,14 +40,11 @@ void setup() {
 }
 
 void loop() {
-	if(TimerBlink1.elapsedX1s()) {
-		TimerBlink1.trigger();
-		digitalWrite(LED_1, !digitalRead(LED_1));
-	}
+	Led1.loop();
 
 	if(TimerBlink2.elapsedX100ms(2)) {
 		TimerBlink2.trigger();
-		digitalWrite(LED_2, !digitalRead(LED_2));
+		Led2.toggle();
 		uart_232.writeData((uint8_t *)str, strlen(str));
 	}
 }
