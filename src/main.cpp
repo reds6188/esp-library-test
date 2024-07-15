@@ -6,6 +6,8 @@ Led Led1(LED_1);
 Led Led2(LED_2);
 Led Led3(LED_3, true);
 
+Button Btn1(P1);
+
 uint8_t text_counter;
 const char * str = "Hello World!";
 
@@ -42,6 +44,8 @@ void setup() {
 	console.header(DOUBLE_DASHED, LOG_BLUE, 80, "START INITIALIZATION");
 	Led1.startBlink(100,900);
 	Led3.reset();
+	Btn1.onPress(setLed3);
+	Btn1.onRelease(resetLed3);
 	pinMode(UART_232_EN, OUTPUT);
 	digitalWrite(UART_232_EN, HIGH);
 	uart_232.begin(UART_232_pin, UART_232_config);
@@ -51,6 +55,7 @@ void setup() {
 
 void loop() {
 	Led1.loop();
+	Btn1.loop();
 
 	if(TimerBlink2.elapsedX100ms(2)) {
 		TimerBlink2.trigger();

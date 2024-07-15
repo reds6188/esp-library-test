@@ -6,8 +6,8 @@
 #include <timer.h>
 #include <serial.h>
 #include <led.h>
+#include <button.h>
 #include "def.h"
-#include "button.h"
 
 #define MAIN_T      "MAIN"      // tag for log
 
