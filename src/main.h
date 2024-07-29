@@ -8,6 +8,7 @@
 #include <led.h>
 #include <button.h>
 #include <wi-fi.h>
+#include <mqtt-client.h>
 #include "def.h"
 
 #define MAIN_T      "MAIN"      // tag for log
