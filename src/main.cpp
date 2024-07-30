@@ -90,6 +90,8 @@ void setup() {
 	pinMode(UART_232_EN, OUTPUT);
 	digitalWrite(UART_232_EN, HIGH);
 	wifi_handler.begin(WIFI_STA);
+	initMqttT5();
+	//wifi_handler.onConnect(initMqttT5);
 	uart_232.begin(UART_232_pin, UART_232_config);
 	uart_232.setHandler(uart_rx_callback);
 	console.header(DASHED, LOG_GREN, 80, "END INITIALIZATION");
