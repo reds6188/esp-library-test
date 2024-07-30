@@ -3,9 +3,8 @@
 
 #include <console.h>
 #include <mqtt-client.h>
+#include <things5.h>
 #include "SPIFFS.h"
-
-#define T5_T                        "T5"
 
 #define PATH_DEVICE_ID				"/device_id.txt"
 #define PATH_DEVICE_CA				"/device.ca.pem"
