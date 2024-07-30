@@ -2,6 +2,7 @@
 #define IOT_H_
 
 #include <console.h>
+#include <timer.h>
 #include <mqtt-client.h>
 #include <things5.h>
 #include "SPIFFS.h"
@@ -30,5 +31,7 @@
 #define LOG_INGESTION_RES			"/logs/ingest_res"
 
 void initMqttT5(void);
+void initVarT5(void);
+void refreshT5(void);
 
 #endif  /* IOT_H_ */

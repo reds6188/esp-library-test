@@ -1,5 +1,8 @@
 #include "iot.h"
 
+Things5 Thing(false);
+Timer TimerMqtt;
+
 char thing5_url[31] = "things5-production/v1/devices/";
 char * device_id;
 
@@ -25,7 +28,7 @@ void getFullT5Topic(char * topic, const char * short_topic) {
 	strcpy(url, thing5_url);
 	strcat(url, device_id);
 	strcat(url, short_topic);
-	console.log(T5_T, "Str = \"" + String(url) + "\"");
+	//console.log(T5_T, "Str = \"" + String(url) + "\"");
 	strcpy(topic, url);
 	free(url);
 }
@@ -67,4 +70,35 @@ void initMqttT5(void) {
 	}
 
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
+	initVarT5();
+}
+
+void initVarT5(void) {
+	Thing.defMetric("temperature", METRICS_INT);
+}
+
+uint8_t fake_temp;
+
+void refreshT5(void) {
+	if(TimerMqtt.elapsedX1s(5)) {
+		TimerMqtt.trigger();
+
+		if(fake_temp < 10)
+			fake_temp++;
+		else
+			fake_temp = 0;
+
+		Thing.createMessage();
+		// Update Metrics ---------------------------------------------------------------------
+		Thing.updateMetric("temperature",	fake_temp);
+		if(Thing.isEmptyMessage()) {
+			Thing.deleteMessage();
+			console.warning(T5_T, "Message is empty");
+		}
+		else {
+			char new_topic[TOPIC_LENGTH];
+			getFullT5Topic(new_topic, DATA_INGESTION_REQ);
+			publishMqtt(new_topic, Thing.getPayload());
+		}
+	}
 }

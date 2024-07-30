@@ -101,6 +101,7 @@ void loop() {
 	Led1.loop();
 	Btn1.loop();
 	Btn2.loop();
+	refreshT5();
 
 	if(TimerBlink2.elapsedX100ms(2)) {
 		TimerBlink2.trigger();
