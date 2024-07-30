@@ -33,5 +33,6 @@
 void initMqttT5(void);
 void initVarT5(void);
 void refreshT5(void);
+void mqtt_on_connect(void);
 
 #endif  /* IOT_H_ */

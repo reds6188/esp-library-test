@@ -69,6 +69,7 @@ void initMqttT5(void) {
 		mqttAddTopic((const char *)new_topic);
 	}
 
+	onMqttConnect(mqtt_on_connect);
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
 	initVarT5();
 }
@@ -100,5 +101,27 @@ void refreshT5(void) {
 			getFullT5Topic(new_topic, DATA_INGESTION_REQ);
 			publishMqtt(new_topic, Thing.getPayload());
 		}
+	}
+}
+
+bool restartFlag = true;
+
+void mqtt_on_connect(void) {
+	char new_topic[TOPIC_LENGTH];
+	if(restartFlag) {
+		restartFlag = false;
+
+		// Send Firmware Version ----------------------------------------------
+		Thing.setUUID();
+		Thing.setProperty("version", String(VERSION));
+		getFullT5Topic(new_topic, FIRMWARE_VERSION_REQ);
+		publishMqtt(new_topic, Thing.getPayload());
+
+		// Send event "Info Gateway Restart" ----------------------------------
+		Thing.createMessage();
+		Thing.addEvent("info_restart");
+		getFullT5Topic(new_topic, DATA_INGESTION_REQ);
+		publishMqtt(new_topic, Thing.getPayload());
+		console.info(T5_T, "Device has restartd");
 	}
 }
