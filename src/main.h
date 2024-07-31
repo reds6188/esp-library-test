@@ -10,6 +10,7 @@
 #include <wi-fi.h>
 #include "def.h"
 #include "iot.h"
+#include "sensors.h"
 
 #define MAIN_T      "MAIN"      // tag for log
 

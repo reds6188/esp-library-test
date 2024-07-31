@@ -71,37 +71,6 @@ void initMqttT5(void) {
 
 	onMqttConnect(mqtt_on_connect);
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
-	initVarT5();
-}
-
-void initVarT5(void) {
-	Thing.defMetric("temperature", METRICS_INT);
-}
-
-uint8_t fake_temp;
-
-void refreshT5(void) {
-	if(TimerMqtt.elapsedX1s(5)) {
-		TimerMqtt.trigger();
-
-		if(fake_temp < 10)
-			fake_temp++;
-		else
-			fake_temp = 0;
-
-		Thing.createMessage();
-		// Update Metrics ---------------------------------------------------------------------
-		Thing.updateMetric("temperature",	fake_temp);
-		if(Thing.isEmptyMessage()) {
-			Thing.deleteMessage();
-			console.warning(T5_T, "Message is empty");
-		}
-		else {
-			char new_topic[TOPIC_LENGTH];
-			getFullT5Topic(new_topic, DATA_INGESTION_REQ);
-			publishMqtt(new_topic, Thing.getPayload());
-		}
-	}
 }
 
 bool restartFlag = true;

@@ -79,9 +79,10 @@ void espRestart(void) {
 
 void setup() {
 	console.header(DOUBLE_DASHED, LOG_BLUE, 80, "START INITIALIZATION");
+	console.info(MAIN_T, "Firwmare version: " + String(VERSION));
 	Led1.startBlink(500,500);
 	Led3.reset();
-	Btn1.onPress(setCredentials);
+	Btn1.onPress(espRestart);
 	Btn2.onPress(
 		[]() {
 			wifi_handler.startScanNetworks();
@@ -89,6 +90,7 @@ void setup() {
 	);
 	pinMode(UART_232_EN, OUTPUT);
 	digitalWrite(UART_232_EN, HIGH);
+	initSensors();
 	wifi_handler.begin(WIFI_STA);
 	initMqttT5();
 	//wifi_handler.onConnect(initMqttT5);
@@ -101,7 +103,7 @@ void loop() {
 	Led1.loop();
 	Btn1.loop();
 	Btn2.loop();
-	refreshT5();
+	readSensors();
 
 	if(TimerBlink2.elapsedX100ms(2)) {
 		TimerBlink2.trigger();
