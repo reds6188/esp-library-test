@@ -61,8 +61,9 @@ void setCredentials(void) {
 		console.info(MAIN_T, ">>> TEST <<< Set credentials of existing network with CORRECT PASSWORD");
 	}
 	else if(wifi_flag == 2) {
-		wifi_handler.setCredentials(default_wifi_ssid, default_wifi_password);
-		console.info(MAIN_T, ">>> TEST <<< Set credentials of NOT existing network");
+		//wifi_handler.setCredentials(default_wifi_ssid, default_wifi_password);
+		//console.info(MAIN_T, ">>> TEST <<< Set credentials of NOT existing network");
+		wifi_handler.setCredentials(my_ssid, my_password);
 	}
 		
 	console.log(MAIN_T, "Credentials was set");
@@ -82,7 +83,8 @@ void setup() {
 	console.info(MAIN_T, "Firwmare version: " + String(VERSION));
 	Led1.startBlink(500,500);
 	Led3.reset();
-	Btn1.onPress(espRestart);
+	//Btn1.onPress(espRestart);
+	Btn1.onPress(setCredentials);
 	Btn2.onPress(
 		[]() {
 			wifi_handler.startScanNetworks();

@@ -88,6 +88,27 @@ void initMqttT5(void) {
 
 bool restartFlag = true;
 
+String getResetReason(void) {
+    esp_reset_reason_t rst_reason = esp_reset_reason();
+    String reason;
+
+    switch(rst_reason) {
+        case ESP_RST_UNKNOWN:   reason = "Reset reason can not be determined";                     break;
+        case ESP_RST_POWERON:   reason = "Reset due to power-on event";                            break;
+        case ESP_RST_EXT:       reason = "Reset by external pin (not applicable for ESP32)";       break;
+        case ESP_RST_SW:        reason = "Software reset via esp_restart";                         break;
+        case ESP_RST_PANIC:     reason = "Software reset due to exception/panic";                  break;
+        case ESP_RST_INT_WDT:   reason = "Reset (software or hardware) due to interrupt watchdog"; break;
+        case ESP_RST_TASK_WDT:  reason = "Reset due to task watchdog";                             break;
+        case ESP_RST_WDT:       reason = "Reset due to other watchdogs";                           break;
+        case ESP_RST_DEEPSLEEP: reason = "Reset after exiting deep sleep mode";                    break;
+        case ESP_RST_BROWNOUT:  reason = "Brownout reset (software or hardware)";                  break;
+        case ESP_RST_SDIO:      reason = "Reset over SDIO";                                        break;
+    }
+
+    return reason;
+}
+
 void mqtt_on_connect(void) {
 	char new_topic[TOPIC_LENGTH];
 	if(restartFlag) {
@@ -101,9 +122,16 @@ void mqtt_on_connect(void) {
 
 		// Send event "Info Gateway Restart" ----------------------------------
 		Thing.createMessage();
-		Thing.addEvent("info_restart");
+		Thing.addEvent("info_restart", getResetReason());
 		getFullT5Topic(new_topic, DATA_INGESTION_REQ);
 		publishMqtt(new_topic, Thing.getPayload());
-		console.info(T5_T, "Device has restartd");
+		console.info(T5_T, "Device has restarted");
+	}
+	else {
+		unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;
+		Thing.createMessage(timestamp);
+		Thing.addLog(timestamp, "MQTT reconnection");
+		getFullT5Topic(new_topic, LOG_INGESTION_REQ);
+		publishMqtt(new_topic, Thing.getPayload());
 	}
 }
