@@ -71,6 +71,7 @@ void initMqttT5(void) {
 
 	onMqttConnect(mqtt_on_connect);
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
+	initNtpClient();
 }
 
 bool restartFlag = true;

@@ -80,5 +80,6 @@ void readSensors(void) {
 			getFullT5Topic(new_topic, DATA_INGESTION_REQ);
 			publishMqtt(new_topic, Thing.getPayload());
 		}
+		time_t now = getTimestampNtp();
 	}
 }

@@ -4,6 +4,7 @@
 #include <console.h>
 #include <timer.h>
 #include <mqtt-client.h>
+#include <ntp-client.h>
 #include <things5.h>
 #include "SPIFFS.h"
 

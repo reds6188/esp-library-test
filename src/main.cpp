@@ -113,19 +113,5 @@ void loop() {
 
 	if(TimerText.elapsedX1s(2)) {
 		TimerText.trigger();
-		if(text_counter < 4)
-			text_counter++;
-		else
-			text_counter = 0;
-		/*
-		console.line(DOUBLE_DASHED, 80);
-		switch(text_counter) {
-			case 0: console.log(MAIN_T, "This text is normal");			break;
-			case 1: console.info(MAIN_T, "Information message");		break;
-			case 2: console.success(MAIN_T, "OK messagge");				break;
-			case 3: console.warning(MAIN_T, "Warning messagge");		break;
-			case 4: console.error(MAIN_T, "Error message");				break;
-		}
-		*/
 	}
 }
