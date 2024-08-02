@@ -6,6 +6,11 @@ Timer TimerMqtt;
 char thing5_url[31] = "things5-production/v1/devices/";
 char * device_id;
 
+void ntp_callback(timeval *tv) {
+	console.log(T5_T, "Got it");
+	Thing.enableTimestamp(true);
+};
+
 char* getFileAsString(fs::FS &fs, String path) {
 	if(fs.exists(path)) {
 		File file = fs.open(path, FILE_READ);
@@ -36,6 +41,9 @@ void getFullT5Topic(char * topic, const char * short_topic) {
 void initMqttT5(void) {
 	fs::SPIFFSFS CERT;
 
+	initNtpClient();
+	onNtpTimeAvailable(ntp_callback);
+
 	// Mount CERT partition -----------------------------------------------------------------------
 	if(!CERT.begin(false, "/spiffs", 4, "spiffs"))
         console.error(MQTT_T, "An Error has occurred while mounting CERT partition");
@@ -48,6 +56,11 @@ void initMqttT5(void) {
 	const char * cert_str = getFileAsString(CERT, PATH_DEVICE_CERTIFICATE);
 	const char * private_str = getFileAsString(CERT, PATH_DEVICE_PRV_KEY);
 	CERT.end();
+
+	if(!device_id || !cacert_str || !cert_str || !private_str) {
+		console.error(T5_T, "Failed to setup MQTT: missing device ID or certificates");
+		return;
+	}
 
 	char client_id[64] = "things5-production-machine-";
 	strncat(client_id, device_id, strlen(device_id));
@@ -71,7 +84,6 @@ void initMqttT5(void) {
 
 	onMqttConnect(mqtt_on_connect);
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
-	initNtpClient();
 }
 
 bool restartFlag = true;

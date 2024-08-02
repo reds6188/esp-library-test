@@ -92,6 +92,7 @@ void setup() {
 	digitalWrite(UART_232_EN, HIGH);
 	initSensors();
 	wifi_handler.begin(WIFI_STA);
+	wifi_handler.setCredentials(my_ssid, my_password);
 	initMqttT5();
 	//wifi_handler.onConnect(initMqttT5);
 	uart_232.begin(UART_232_pin, UART_232_config);

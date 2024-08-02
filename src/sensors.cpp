@@ -69,7 +69,9 @@ void readSensors(void) {
 		console.info(SENS_T, sens_str);
 
 		// Update Things5
-		Thing.createMessage();
+		unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;
+		console.info(SENS_T, "TImestamp = " + String(timestamp));
+		Thing.createMessage(timestamp);
 		Thing.updateMetric("temperature", temperature.current);
 		Thing.updateMetric("humidity", humidity.current);
 		Thing.updateMetric("pressure", pressure.current);
@@ -80,6 +82,6 @@ void readSensors(void) {
 			getFullT5Topic(new_topic, DATA_INGESTION_REQ);
 			publishMqtt(new_topic, Thing.getPayload());
 		}
-		time_t now = getTimestampNtp();
+		//time_t now = getTimestampNtp();
 	}
 }
