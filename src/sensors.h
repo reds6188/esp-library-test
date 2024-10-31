@@ -7,6 +7,7 @@
 #include <timer.h>
 #include "def.h"
 #include "iot.h"
+#include "t5_variables.h"
 
 #define SENS_T	"SENSOR"
 

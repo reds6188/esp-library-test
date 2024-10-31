@@ -109,6 +109,10 @@ String getResetReason(void) {
     return reason;
 }
 
+void printResetReason(void) {
+	console.info(IOT_T, getResetReason());
+}
+
 void mqtt_on_connect(void) {
 	char new_topic[TOPIC_LENGTH];
 	if(restartFlag) {
@@ -122,10 +126,20 @@ void mqtt_on_connect(void) {
 
 		// Send event "Info Gateway Restart" ----------------------------------
 		Thing.createMessage();
-		Thing.addEvent("info_restart", getResetReason());
+		esp_reset_reason_t rst_reason = esp_reset_reason();
+		if(rst_reason == ESP_RST_POWERON)
+			Thing.addEvent(T5_INFO_POWER_ON);
+		else if(rst_reason == ESP_RST_SW)
+			Thing.addEvent(T5_INFO_SW_RESET);
+		else
+			Thing.addEvent(T5_WRN_RESET, getResetReason());
+
+		// Send all data ---------------------
+		//Thing.writeAllMetrics();
 		getFullT5Topic(new_topic, DATA_INGESTION_REQ);
 		publishMqtt(new_topic, Thing.getPayload());
-		console.info(T5_T, "Device has restarted");
+		console.info(IOT_T, "System was restarted");
+		printResetReason();
 	}
 	else {
 		unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;

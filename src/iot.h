@@ -7,6 +7,9 @@
 #include <ntp-client.h>
 #include <things5.h>
 #include "SPIFFS.h"
+#include "t5_variables.h"
+
+#define IOT_T                       "IOT"
 
 #define PATH_DEVICE_ID				"/device_id.txt"
 #define PATH_DEVICE_CA				"/device.ca.pem"

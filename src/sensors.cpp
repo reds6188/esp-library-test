@@ -72,9 +72,9 @@ void readSensors(void) {
 		unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;
 		console.info(SENS_T, "TImestamp = " + String(timestamp));
 		Thing.createMessage(timestamp);
-		Thing.updateMetric("temperature", temperature.current);
-		Thing.updateMetric("humidity", humidity.current);
-		Thing.updateMetric("pressure", pressure.current);
+		Thing.updateMetric(T5_TEMPERATURE, temperature.current);
+		Thing.updateMetric(T5_HUMIDITY, humidity.current);
+		Thing.updateMetric(T5_PRESSURE, pressure.current);
 		if(Thing.isEmptyMessage())
 			Thing.deleteMessage();
 		else {
