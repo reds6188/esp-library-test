@@ -78,13 +78,20 @@ void espRestart(void) {
 	ESP.restart();
 }
 
+void testPanicError(void) {
+	console.println("PANIC!!!");
+	char * pntr;
+	console.log(MAIN_T, String(strlen(pntr)));
+}
+
 void setup() {
 	console.header(DOUBLE_DASHED, LOG_BLUE, 80, "START INITIALIZATION");
 	console.info(MAIN_T, "Firwmare version: " + String(VERSION));
 	Led1.startBlink(500,500);
 	Led3.reset();
 	//Btn1.onPress(espRestart);
-	Btn1.onPress(setCredentials);
+	//Btn1.onPress(setCredentials);
+	Btn1.onPress(testPanicError);
 	Btn2.onPress(
 		[]() {
 			wifi_handler.startScanNetworks();
