@@ -66,11 +66,11 @@ void readSensors(void) {
 			pressure.max = pressure.current;
 		sens_str += "Pressure : " + String(pressure.current) + " hPa";
 
-		console.info(SENS_T, sens_str);
+		//console.info(SENS_T, sens_str);
 
 		// Update Things5
 		unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;
-		console.info(SENS_T, "TImestamp = " + String(timestamp));
+		//console.info(SENS_T, "TImestamp = " + String(timestamp));
 		Thing.createMessage(timestamp);
 		Thing.updateMetric(T5_TEMPERATURE, temperature.current);
 		Thing.updateMetric(T5_HUMIDITY, humidity.current);
