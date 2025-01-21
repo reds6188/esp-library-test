@@ -3,14 +3,21 @@
 
 Timer TimerBlink2, TimerText;
 Uart uart_232(UART_232);
+#ifdef DEMOBOARD_V1
+Led Led1(GRN_LED);
+Led Led2(YLW_LED);
+Led Led3(RED_LED, true);
+Button Btn1(BUTTON_1);
+Button Btn2(BUTTON_2);
+#else
 Led Led1(LED_1);
 Led Led2(LED_2);
 Led Led3(LED_3, true);
-
-WiFiHandler wifi_handler("esp-test");
-
 Button Btn1(P1);
 Button Btn2(P2);
+#endif
+
+WiFiHandler wifi_handler("esp-test");
 
 uint8_t text_counter;
 const char * str = "Hello World!";
@@ -101,7 +108,8 @@ void setup() {
 	digitalWrite(UART_232_EN, HIGH);
 	initSensors();
 	wifi_handler.begin(WIFI_STA);
-	wifi_handler.setCredentials(my_ssid, my_password);
+	//wifi_handler.setCredentials(my_ssid, my_password);
+	wifi_handler.setCredentials(test_wifi_ssid, test_wifi_password);
 	initMqttT5();
 	//wifi_handler.onConnect(initMqttT5);
 	uart_232.begin(UART_232_pin, UART_232_config);
@@ -115,11 +123,12 @@ void loop() {
 	Btn2.loop();
 	readSensors();
 
+	/*
 	if(TimerBlink2.elapsedX100ms(2)) {
 		TimerBlink2.trigger();
-		Led2.toggle();
 		uart_232.writeData((uint8_t *)str, strlen(str));
 	}
+	*/
 
 	if(TimerText.elapsedX1s(2)) {
 		TimerText.trigger();

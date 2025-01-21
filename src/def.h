@@ -1,8 +1,24 @@
 #ifndef DEF_H_
 #define DEF_H_
 
+#ifdef DEMOBOARD_V1
 // ================================================================================================
-// Pin definitions for ESP32 Proto BOard V2 (created by Daniele Rossi) ============================
+// Pin definitions for ESP32 Proto Board V1 (created by Daniele Rossi) ============================
+// ================================================================================================
+
+#define BUTTON_1    34
+#define BUTTON_2    35
+
+#define RED_LED     26
+#define YLW_LED     27
+#define GRN_LED     14
+
+#define I2C_SDA     21
+#define I2C_SCL     22
+
+#else
+// ================================================================================================
+// Pin definitions for ESP32 Proto Board V2 (created by Daniele Rossi) ============================
 // ================================================================================================
 
 #define BUTTON_1    34
@@ -14,6 +30,8 @@
 
 #define I2C_SDA     21
 #define I2C_SCL     22
+
+#endif
 
 // ================================================================================================
 // Pin definitions for CS005350 ===================================================================

@@ -45,7 +45,7 @@ void initMqttT5(void) {
 	onNtpTimeAvailable(ntp_callback);
 
 	// Mount CERT partition -----------------------------------------------------------------------
-	if(!CERT.begin(false, "/spiffs", 4, "spiffs"))
+	if(!CERT.begin(false, "/cert", 4, "cert"))
         console.error(MQTT_T, "An Error has occurred while mounting CERT partition");
 	else
 		console.success(MQTT_T, "CERT partition has mounted");
