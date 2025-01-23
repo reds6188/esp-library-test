@@ -41,5 +41,6 @@ void refreshT5(void);
 void mqtt_on_connect(void);
 
 extern Things5 Thing;
+extern char * device_id;
 
 #endif  /* IOT_H_ */

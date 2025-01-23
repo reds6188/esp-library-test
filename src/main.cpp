@@ -91,6 +91,75 @@ void testPanicError(void) {
 	console.log(MAIN_T, String(strlen(pntr)));
 }
 
+String api_restart_cb(uint8_t * payload) {
+	DynamicJsonDocument doc(16);
+	doc["status"] = "done";
+	String msg;
+	serializeJson(doc, msg);
+	return msg;
+}
+
+String api_version_cb(uint8_t * payload) {
+	DynamicJsonDocument doc(256);
+	doc["version"] = String(VERSION);
+	doc["date"] = String(__DATE__);
+	doc["ssid"] = wifi_handler.getSSID();
+	doc["rssi"] = wifi_handler.getRSSI();
+	doc["mac_ap"] = wifi_handler.getMacAddress(WIFI_IF_AP);
+	doc["mac_sta"] = wifi_handler.getMacAddress(WIFI_IF_STA);
+	doc["id"] = device_id;
+	String msg;
+	serializeJson(doc, msg);
+	return msg;
+}
+
+String api_ping_cb(uint8_t * payload) {
+	DynamicJsonDocument doc(64);
+	doc["status"] = "ok";
+	doc["rssi"] = wifi_handler.getRSSI();
+	String msg;
+	serializeJson(doc, msg);
+	return msg;
+}
+
+String api_scan_start_cb(uint8_t * payload) {
+	DynamicJsonDocument doc(64);
+		wifi_handler.startScanNetworks();
+		/*
+		if(!wifi_handler.connected()) {
+			wifi_handler.end();
+			console.warning(WIFI_T, "Forcing disconnection to avoid scan failure");
+		}
+		*/
+	doc["status"] = "progress";
+	String msg;
+	serializeJson(doc, msg);
+	return msg;
+}
+
+String api_scan_status_cb(uint8_t * payload) {
+	String msg;
+	return msg;
+}
+
+
+String api_rest_callback(String uri, uint8_t * payload) {
+	DynamicJsonDocument doc(1536);
+	DynamicJsonDocument rxDoc(384);
+
+	if(uri.equals("/status")) {
+		doc["version"] = String(VERSION);
+		doc["date"] = String(__DATE__);
+	}
+	else {
+		doc["info"] = "Command not recognized";
+	}
+
+	String msg;
+	serializeJson(doc, msg);
+	return msg;
+}
+
 void setup() {
 	console.header(DOUBLE_DASHED, LOG_BLUE, 80, "START INITIALIZATION");
 	console.info(MAIN_T, "Firwmare version: " + String(VERSION));
@@ -99,11 +168,7 @@ void setup() {
 	//Btn1.onPress(espRestart);
 	//Btn1.onPress(setCredentials);
 	Btn1.onPress(testPanicError);
-	Btn2.onPress(
-		[]() {
-			wifi_handler.startScanNetworks();
-		}
-	);
+	Btn2.onPress([]() { wifi_handler.startScanNetworks(); });
 	pinMode(UART_232_EN, OUTPUT);
 	digitalWrite(UART_232_EN, HIGH);
 	initSensors();
@@ -111,6 +176,11 @@ void setup() {
 	//wifi_handler.setCredentials(my_ssid, my_password);
 	wifi_handler.setCredentials(test_wifi_ssid, test_wifi_password);
 	initMqttT5();
+	initWebServer(api_rest_callback);
+	addGetCallback("/version", api_version_cb);
+	addGetCallback("/ping", api_ping_cb);
+	addGetCallback("/scan-start", api_scan_start_cb);
+	addGetCallback("/scan-status", api_scan_status_cb);
 	//wifi_handler.onConnect(initMqttT5);
 	uart_232.begin(UART_232_pin, UART_232_config);
 	uart_232.setHandler(uart_rx_callback);

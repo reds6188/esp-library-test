@@ -11,6 +11,7 @@
 #include "def.h"
 #include "iot.h"
 #include "sensors.h"
+#include <web-server.h>
 
 #define MAIN_T      "MAIN"      // tag for log
 
