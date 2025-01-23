@@ -35,12 +35,11 @@
 #define LOG_INGESTION_RES			"/logs/ingest_res"
 
 void getFullT5Topic(char * topic, const char * short_topic);
-void initMqttT5(void);
-void initVarT5(void);
-void refreshT5(void);
+bool initMqttT5(void);
 void mqtt_on_connect(void);
 
 extern Things5 Thing;
 extern char * device_id;
+extern bool mqtt_enabled;
 
 #endif  /* IOT_H_ */

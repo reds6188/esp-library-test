@@ -3,6 +3,8 @@
 Things5 Thing(false);
 Timer TimerMqtt;
 
+bool mqtt_enabled;
+
 char thing5_url[31] = "things5-production/v1/devices/";
 char * device_id;
 
@@ -38,7 +40,7 @@ void getFullT5Topic(char * topic, const char * short_topic) {
 	free(url);
 }
 
-void initMqttT5(void) {
+bool initMqttT5(void) {
 	fs::SPIFFSFS CERT;
 
 	initNtpClient();
@@ -59,7 +61,7 @@ void initMqttT5(void) {
 
 	if(!device_id || !cacert_str || !cert_str || !private_str) {
 		console.error(T5_T, "Failed to setup MQTT: missing device ID or certificates");
-		return;
+		return false;
 	}
 
 	char client_id[64] = "things5-production-machine-";
@@ -84,6 +86,8 @@ void initMqttT5(void) {
 
 	onMqttConnect(mqtt_on_connect);
 	initMqttClient(T5_BROKER_URL, client_id, cacert_str, cert_str, private_str);
+
+	return true;
 }
 
 bool restartFlag = true;

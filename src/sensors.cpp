@@ -90,7 +90,8 @@ void readSensors(void) {
 			fakeSensor();
 		}
 
-		sendSensorData();
+		if(mqtt_enabled)
+			sendSensorData();
 	}
 }
 

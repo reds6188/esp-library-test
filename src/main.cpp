@@ -175,7 +175,7 @@ void setup() {
 	wifi_handler.begin(WIFI_STA);
 	//wifi_handler.setCredentials(my_ssid, my_password);
 	wifi_handler.setCredentials(test_wifi_ssid, test_wifi_password);
-	initMqttT5();
+	mqtt_enabled = initMqttT5();
 	initWebServer(api_rest_callback);
 	addGetCallback("/version", api_version_cb);
 	addGetCallback("/ping", api_ping_cb);
