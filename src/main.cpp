@@ -40,7 +40,7 @@ uart_config_t UART_232_config = {
 };
 
 void uart_rx_callback (uint8_t *data, int data_size) {
-	digitalWrite(LED_3, !digitalRead(LED_3));
+	//digitalWrite(LED_3, !digitalRead(LED_3));
 }
 
 void setLed3(void) {

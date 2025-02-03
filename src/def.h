@@ -8,6 +8,12 @@
 #define I2C_SDA     21
 #define I2C_SCL     22
 
+// RS-232 -----------------------------
+#define UART_232		UART_NUM_2
+#define UART_232_TX     17
+#define UART_232_RX     16
+#define UART_232_EN     4
+
 #ifdef DEMOBOARD_V1
 // ================================================================================================
 // Pin definitions for ESP32 Proto Board V1 (created by Daniele Rossi) ============================
@@ -57,12 +63,6 @@
 #define DIP3		27
 #define DIP4		26
 #define JUMPER      23
-
-// RS-232 -----------------------------
-#define UART_232		UART_NUM_2
-#define UART_232_TX     17
-#define UART_232_RX     16
-#define UART_232_EN     4
 
 // RS-485 -----------------------------
 #define UART_485		UART_NUM_1
