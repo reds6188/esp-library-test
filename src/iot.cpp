@@ -153,3 +153,12 @@ void mqtt_on_connect(void) {
 		publishMqtt(new_topic, Thing.getPayload());
 	}
 }
+
+void sendLog(String content) {
+	char new_topic[TOPIC_LENGTH];
+	unsigned long long timestamp = (unsigned long long)getTimestampNtp() * 1000;
+	Thing.createMessage(timestamp);
+	Thing.addLog(timestamp, content);
+	getFullT5Topic(new_topic, LOG_INGESTION_REQ);
+	publishMqtt(new_topic, Thing.getPayload());	
+}

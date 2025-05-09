@@ -37,6 +37,7 @@
 void getFullT5Topic(char * topic, const char * short_topic);
 bool initMqttT5(void);
 void mqtt_on_connect(void);
+void sendLog(String content);
 
 extern Things5 Thing;
 extern char * device_id;

@@ -64,6 +64,7 @@ void readSensors(void) {
 	if(TimerSensor.elapsedX1s(5)) {
 		TimerSensor.trigger();
 
+		bool meas_err = false;
 		String sens_str;
 		
 		if(sens_enabled) {
@@ -71,16 +72,28 @@ void readSensors(void) {
 			temperature.current = roundFloat(bme.readTemperature());
 			checkMinMax(&temperature);
 			sens_str += "Temp. : " + String(temperature.current) + " °C ; ";
+			if(temperature.current > 100) {
+				sendLog("Wrong temperature read: " + String(temperature.current,2));
+				meas_err = true;
+			}
 
 			// Read humidity
 			humidity.current = roundFloat(bme.readHumidity());
 			checkMinMax(&humidity);
 			sens_str += "Humidity : " + String(humidity.current) + " % ; ";
-
+			if(humidity.current > 100) {
+				sendLog("Wrong humidity read: " + String(humidity.current,2));
+				meas_err = true;
+			}
+				
 			// Read pressure
 			pressure.current = roundFloat(bme.readPressure() / 100.0F);
 			checkMinMax(&pressure);
 			sens_str += "Pressure : " + String(pressure.current) + " hPa";
+			if(pressure.current > 1200) {
+				sendLog("Wrong pressure read: " + String(pressure.current,2));
+				meas_err = true;
+			}		
 
 			#ifdef LOG_SENSOR
 			console.info(SENS_T, sens_str);
@@ -90,7 +103,7 @@ void readSensors(void) {
 			fakeSensor();
 		}
 
-		if(mqtt_enabled)
+		if(mqtt_enabled && !meas_err)
 			sendSensorData();
 	}
 }
